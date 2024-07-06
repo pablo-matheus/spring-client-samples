@@ -25,6 +25,10 @@ public class PokeService {
         return pokeWebClient.getPokemon(name);
     }
 
+    public String fetchPokemonDataWithWebClientBlockingCall(String name) {
+        return pokeWebClient.getPokemon(name).block();
+    }
+
     public String fetchPokemonDataWithSpringInterfaceClient(String name) {
         return pokeHttpClient.getPokemon(name);
     }

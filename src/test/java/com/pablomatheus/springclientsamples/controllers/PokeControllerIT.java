@@ -49,6 +49,16 @@ class PokeControllerIT {
     }
 
     @Test
+    void testFetchDittoDataWithWebClientBlocking() {
+        webTestClient.get()
+                .uri(String.format("http://localhost:%d/api/v1/poke/web-client-blocking?name={name}", port), "ditto")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(response -> assertThat(response.getResponseBody()).contains("ditto"));
+    }
+
+    @Test
     void testFetchDittoDataWithSpringInterfaceClient() throws Exception {
         mockMvc.perform(get("/api/v1/poke/spring-interface-client").param("name", "ditto"))
                 .andExpect(status().isOk())
@@ -73,6 +83,17 @@ class PokeControllerIT {
     void testFetchDataWithWebClientError() {
         webTestClient.get()
                 .uri(String.format("http://localhost:%d/api/v1/poke/web-client?name={name}", port), "unknown")
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(String.class)
+                .consumeWith(response -> assertThat(response.getResponseBody()).contains("Not Found"));
+        ;
+    }
+
+    @Test
+    void testFetchDataWithWebClientBlockingError() {
+        webTestClient.get()
+                .uri(String.format("http://localhost:%d/api/v1/poke/web-client-blocking?name={name}", port), "unknown")
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(String.class)

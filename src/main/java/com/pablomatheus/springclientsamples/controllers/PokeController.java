@@ -31,6 +31,12 @@ public class PokeController {
         return ResponseEntity.ok(pokeService.fetchPokemonDataWithWebClient(name));
     }
 
+    @Operation(summary = "Fetch Pokémon data using WebClient blocking call")
+    @GetMapping("/web-client-blocking")
+    public ResponseEntity<String> fetchPokemonDataWithWebClientBlockingCall(@RequestParam String name) {
+        return ResponseEntity.ok(pokeService.fetchPokemonDataWithWebClientBlockingCall(name));
+    }
+
     @Operation(summary = "Fetch Pokémon data using Spring Interface Client")
     @GetMapping("/spring-interface-client")
     public ResponseEntity<String> fetchPokemonDataWithSpringInterfaceClient(@RequestParam String name) {
