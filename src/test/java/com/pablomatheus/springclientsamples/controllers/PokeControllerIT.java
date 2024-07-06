@@ -1,4 +1,4 @@
-package com.pablomatheus.springclientsamples.controller;
+package com.pablomatheus.springclientsamples.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

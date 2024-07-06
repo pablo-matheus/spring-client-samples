@@ -1,4 +1,4 @@
-package com.pablomatheus.springclientsamples.controller;
+package com.pablomatheus.springclientsamples.controllers;
 
 import com.pablomatheus.springclientsamples.services.PokeService;
 import io.swagger.v3.oas.annotations.Operation;
