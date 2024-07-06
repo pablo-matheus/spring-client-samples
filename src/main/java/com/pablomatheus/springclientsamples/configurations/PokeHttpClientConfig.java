@@ -8,10 +8,10 @@ import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
-public class ApiClientConfig {
+public class PokeHttpClientConfig {
 
     @Bean
-    public PokeHttpClient pokeApiClient() {
+    public PokeHttpClient pokeHttpClient() {
         RestClient restClient = RestClient.builder()
                 .baseUrl("https://pokeapi.co/api/v2")
                 .build();
