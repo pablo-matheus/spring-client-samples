@@ -13,7 +13,7 @@ public class PokeWebClient {
 
     public Mono<String> getPokemon(String name) {
         return webClient.get()
-                .uri("/pokemon/{name}", name)
+                .uri("/api/v2/pokemon/{name}", name)
                 .retrieve()
                 .bodyToMono(String.class);
     }
