@@ -4,10 +4,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "pokeFeignClient", url = "https://pokeapi.co/api/v2")
+@FeignClient(name = "pokeFeignClient", url = "${poke-api.base-url}")
 public interface PokeFeignClient {
 
-    @GetMapping("/pokemon/{name}")
+    @GetMapping("/api/v2/pokemon/{name}")
     String getPokemon(@PathVariable String name);
 
 }
