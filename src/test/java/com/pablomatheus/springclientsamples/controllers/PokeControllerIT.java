@@ -1,29 +1,21 @@
 package com.pablomatheus.springclientsamples.controllers;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PokeControllerIT {
-
-    @LocalServerPort
-    private int port;
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,85 +24,103 @@ class PokeControllerIT {
     private WebTestClient webTestClient;
 
     @Test
-    void testFetchDittoDataWithRestTemplate() throws Exception {
-        mockMvc.perform(get("/api/v1/poke/rest-template").param("name", "ditto"))
+    void testFetchPokemonDataWithRestTemplate() throws Exception {
+        String name = "ditto";
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/poke/rest-template").param("name", name))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("ditto")));
+                .andExpect(content().string(containsString(name)));
     }
 
     @Test
-    void testFetchDittoDataWithWebClient() {
+    void testFetchPokemonDataWithWebClient() {
+        String name = "ditto";
+
         webTestClient.get()
-                .uri(String.format("http://localhost:%d/api/v1/poke/web-client?name={name}", port), "ditto")
+                .uri("/api/v1/poke/web-client?name={name}", name)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
-                .consumeWith(response -> assertThat(response.getResponseBody()).contains("ditto"));
+                .consumeWith(response -> assertThat(response.getResponseBody()).contains(name));
     }
 
     @Test
-    void testFetchDittoDataWithWebClientBlocking() {
+    void testFetchPokemonDataWithWebClientBlocking() {
+        String name = "ditto";
+
         webTestClient.get()
-                .uri(String.format("http://localhost:%d/api/v1/poke/web-client-blocking?name={name}", port), "ditto")
+                .uri("/api/v1/poke/web-client-blocking?name={name}", name)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
-                .consumeWith(response -> assertThat(response.getResponseBody()).contains("ditto"));
+                .consumeWith(response -> assertThat(response.getResponseBody()).contains(name));
     }
 
     @Test
-    void testFetchDittoDataWithSpringInterfaceClient() throws Exception {
-        mockMvc.perform(get("/api/v1/poke/spring-interface-client").param("name", "ditto"))
+    void testFetchPokemonDataWithSpringInterfaceClient() throws Exception {
+        String name = "ditto";
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/poke/spring-interface-client").param("name", name))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("ditto")));
+                .andExpect(content().string(containsString(name)));
     }
 
     @Test
-    void testFetchDittoDataWithFeignClient() throws Exception {
-        mockMvc.perform(get("/api/v1/poke/feign-client").param("name", "ditto"))
+    void testFetchPokemonDataWithFeignClient() throws Exception {
+        String name = "ditto";
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/poke/feign-client").param("name", name))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("ditto")));
+                .andExpect(content().string(containsString(name)));
     }
 
     @Test
-    void testFetchDataWithRestTemplateError() throws Exception {
-        mockMvc.perform(get("/api/v1/poke/rest-template").param("name", "unknown"))
+    void testFetchPokemonDataWithRestTemplateError() throws Exception {
+        String name = "unknown";
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/poke/rest-template").param("name", name))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("Not Found")));
     }
 
     @Test
-    void testFetchDataWithWebClientError() {
+    void testFetchPokemonDataWithWebClientError() {
+        String name = "unknown";
+
         webTestClient.get()
-                .uri(String.format("http://localhost:%d/api/v1/poke/web-client?name={name}", port), "unknown")
+                .uri("/api/v1/poke/web-client?name={name}", name)
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(String.class)
                 .consumeWith(response -> assertThat(response.getResponseBody()).contains("Not Found"));
-        ;
     }
 
     @Test
-    void testFetchDataWithWebClientBlockingError() {
+    void testFetchPokemonDataWithWebClientBlockingError() {
+        String name = "unknown";
+
         webTestClient.get()
-                .uri(String.format("http://localhost:%d/api/v1/poke/web-client-blocking?name={name}", port), "unknown")
+                .uri("/api/v1/poke/web-client-blocking?name={name}", name)
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(String.class)
                 .consumeWith(response -> assertThat(response.getResponseBody()).contains("Not Found"));
-        ;
     }
 
     @Test
-    void testFetchDataWithSpringInterfaceClientError() throws Exception {
-        mockMvc.perform(get("/api/v1/poke/spring-interface-client").param("name", "unknown"))
+    void testFetchPokemonDataWithSpringInterfaceClientError() throws Exception {
+        String name = "unknown";
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/poke/spring-interface-client").param("name", name))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("Not Found")));
     }
 
     @Test
-    void testFetchDataWithFeignClientError() throws Exception {
-        mockMvc.perform(get("/api/v1/poke/feign-client").param("name", "unknown"))
+    void testFetchPokemonDataWithFeignClientError() throws Exception {
+        String name = "unknown";
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/poke/feign-client").param("name", name))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("Not Found")));
 

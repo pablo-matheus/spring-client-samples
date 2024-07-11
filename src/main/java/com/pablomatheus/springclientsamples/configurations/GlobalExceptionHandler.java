@@ -22,7 +22,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({FeignException.class})
     public ResponseEntity<String> handleFeignException(FeignException exception) {
         log.error("Error while using OpenFeign", exception);
-        return ResponseEntity.status(exception.status()).body(exception.contentUTF8());
+
+        int status = exception.status();
+        if (Integer.toString(status).length() < 3) {
+            status = 500;
+        }
+
+        return ResponseEntity.status(status).body(exception.contentUTF8());
     }
 
     @ExceptionHandler({WebClientResponseException.class})
